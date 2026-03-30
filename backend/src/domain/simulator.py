@@ -5,8 +5,8 @@ from operator import __or__
 import subprocess
 import json
 
-from modsim import agents
-from store import QRangeStore
+from src.domain.modsim import agents
+from src.domain.store import QRangeStore
 
 def parse_query(query):
     # NOTE: The query parser is invoked via a subprocess call to the Rust binary

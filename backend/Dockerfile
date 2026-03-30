@@ -1,26 +1,24 @@
 FROM rust:1.84 AS builder
 
-RUN mkdir /queries
 WORKDIR /queries
 COPY queries .
-
 RUN cargo clean
 RUN cargo build --release
 
-# Running python
 FROM python:3.12
 
-# Create and set working directory
-RUN mkdir /app
 WORKDIR /app
 
-COPY app/requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY app .
+# Copy backend source
+COPY . .
 
-RUN mkdir /queries
-
+# Copy compiled Rust binary
+RUN mkdir -p /queries/target/release
 COPY --from=builder /queries/target/release/sedaro-nano-queries /queries/target/release/sedaro-nano-queries
 
-CMD [ "python3", "-m" , "flask", "run", "--debug", "--host=0.0.0.0", "--port=8000" ]
+# Run FastAPI
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
