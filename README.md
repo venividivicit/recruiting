@@ -1,13 +1,17 @@
 # Sedaro Nano
+
 The tiniest possible mockup of our system
 
 ## Goal
+
 The goal of this mini-project is to gain a better understanding of your ability to **be creative**, **think through problems**, and **solve relevant challenges** related to the engineering role you have applied for at Sedaro. This is an opportunity for you to show off your personal strengths. Don't focus on the simple contributions and instead aim to really impress us.
 
 Submissions are evaluated on whether they are job-relevant, meet the title level, make the product better, keep a high quality bar, and are clearly and concisely explained in the write-up. The project is due within **7 days** of receipt and we expect you to spend no more than **6 hours** on it. If you have any questions, issues, or if you get stuck, please contact Kacie at `kacie.neurohr@sedaro.com`.
 
 ## Submission
+
 Please submit a `.zip` file including:
+
 - The **code** (excluding temporary or .gitignored files and directories, such as `__pycache__`, `node_modules`, `target`, or any local virtual environments)
 - **Instructions** for setting up and running your solution
 - **Screenshots or a video** of your solution in action (we love to see videos 🙌)
@@ -22,17 +26,20 @@ Once you have completed your solution, email it to `kacie.neurohr@sedaro.com` an
 **We are happy for you to fork this repository but we ask that you keep the fork private so it remains hidden from other candidates.**
 
 ## Choosing a Project
+
 Included in this directory is a tiny mockup of Sedaro's system. Though it technically comprises a full-stack app, there are _many_ areas in which it could be improved. Review the files that make up Sedaro Nano to figure out how it works, then choose a project that shows off your unique strengths. The prompt is intentionally open-ended to allow creative solutions.
 
 Here are some suggestions to get you thinking:
 
 #### Frontend/full-stack
+
 - Improve interactivity, for example live-streaming the simulation and allowing users to control the playback speed during the simulation
 - Improve alignment with accessibility standards
 - Elegantly support creating and managing many agents
 - Support running a series of simulations with varying parameters and displaying the results
 
 #### Backend
+
 - Add unique patterns of user engagement
 - Create a more scalable storage solution than a JSON string in one DB row
 - Do some statistical analysis on the data
@@ -40,23 +47,27 @@ Here are some suggestions to get you thinking:
 - Incorporate computational optimizations (e.g. linear programming)
 
 #### DevOps
+
 - Integrate observability tooling and use it to performance profile the application
 - Improve the availability of the application using clustering and infrastructure as code
 - Write the "supreme pizza" version of a CI/CD pipeline
 - Analyze and minimize the attack surface of the application without constraining development
 
 #### Workflows
+
 - Set up background jobs to preprocess data
 - Integrate observability tooling and use it to performance profile the application
 - Improve the availability of the application using clustering and infrastructure as code
 - Create a more scalable storage solution than a JSON string in one DB row
 
 #### Modeling & Simulation
+
 - Improve the numerical stability of the simulation functions
 - Implement additional modeling and simulation scope
 - Analyze the sensitivity to initial conditions
 
 #### Compiler & Runtime
+
 - Speed up either buildtime or runtime
 - "Compile" the query language which is currently interpreted
 - Make simulations deterministic
@@ -68,6 +79,7 @@ Here are some suggestions to get you thinking:
 ![](./files/screenshot2.png)
 
 ## Setup
+
 1. Clone this repository.
    - Please note that **only** cloning via HTTPS is supported
    - Please **do not** commit changes to any branch of this repository. If you would like to use git, you may fork this repository to create a private repo of your own
@@ -79,6 +91,7 @@ Here are some suggestions to get you thinking:
    - Changes to both the React app and the Flask app should auto reload.
 
 ### Directory Structure
+
 ```sh
 .
 ├── README.md                 # This README
@@ -99,9 +112,13 @@ Here are some suggestions to get you thinking:
 ```
 
 ### Tips
+
 - You may wish to search for `NOTE:` in the code to get situated.
 - The Python and React code will auto-reload when edited, but Rust changes require manual rebuilds.
 - It's possible to work on parts of this repo outside of the docker containers for more rapid development.
 
 ### Tutorial
+
 In the initial version, the first body is not affected by the gravitational force of the second. See `app/query_tutorial.md` for guidance on fixing this, and a brief introduction to the nano query language.
+
+test
