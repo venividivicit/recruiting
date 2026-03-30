@@ -15,4 +15,4 @@ def get_latest_simulation(db: Session = Depends(get_db)):
 
 @router.post("")
 def run_simulation(payload: SimulationCreate, db: Session = Depends(get_db)):
-    return SimulationService(db).run(payload.init)
+    return SimulationService(db).run(payload.root)
