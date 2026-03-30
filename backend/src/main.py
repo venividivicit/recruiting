@@ -16,3 +16,14 @@ app.add_middleware(
 
 app.include_router(health_router)
 app.include_router(simulation_router)
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        "src.main:app",
+        host=settings.api_host,
+        port=settings.api_port,
+        reload=settings.debug,
+        log_level=settings.log_level.lower(),
+    )

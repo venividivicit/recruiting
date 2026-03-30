@@ -14,13 +14,19 @@ class SimulationService:
         return json.loads(latest.data) if latest else []
 
     def run(self, init: dict):
+        # Convert Pydantic BodyState objects -> plain dicts
+        init_dict = {
+            agent_id: state.model_dump() if hasattr(state, "model_dump") else state
+            for agent_id, state in init.items()
+        }
+
         # preserve old behavior
-        for key in init.keys():
-            init[key]["time"] = 0
-            init[key]["timeStep"] = 0.01
+        for key in init_dict.keys():
+            init_dict[key]["time"] = 0
+            init_dict[key]["timeStep"] = 0.01
 
         store = QRangeStore()
-        simulator = Simulator(store=store, init=init)
+        simulator = Simulator(store=store, init=init_dict)
         simulator.simulate()
 
         self.repo.create(json.dumps(store.store))
