@@ -1,7 +1,5 @@
 # MODELING & SIMULATION
 
-from random import random
-
 import numpy as np
 
 def propagate_velocity(time_step, position, velocity, other_position, m_other):

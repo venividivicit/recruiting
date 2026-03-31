@@ -13,12 +13,19 @@ class QRangeStore:
     """
 
     def export(self):
-        rows = []
+        # Group per (low, high), then merge agent states
+        grouped = {}  # (low, high) -> {agent_id: state}
         for agent_id, lows in self._lows.items():
             highs = self._highs[agent_id]
             vals = self._vals[agent_id]
             for i in range(len(lows)):
-                rows.append((lows[i], highs[i], {agent_id: vals[i]}))
+                key = (lows[i], highs[i])
+                if key not in grouped:
+                    grouped[key] = {}
+                grouped[key][agent_id] = vals[i]
+                
+        rows = [(low, high, state) for (low, high), state in grouped.items()]
+        rows.sort(key=lambda r: (r[0], r[1]))
         return rows
 
     def __init__(self):
