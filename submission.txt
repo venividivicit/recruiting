@@ -6,7 +6,7 @@ Primary changes:
     - modular code is easy to maintain and expand overtime
     - separation of concerts help with testing and upkeep
 - updated the project to use postgress database
-    - integrated alembic to keep track of schema
+    - integrated alembic to keep track of schemas
     - made easy to make changes to database tables and models 
     - clear pathway to handle migrations and downgrade (if needed)
     - database connection pooling via SQLAlchemy to avoid connection overhead
