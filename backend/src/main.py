@@ -1,10 +1,29 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.core.config import settings
+
 from src.api.routers.health import router as health_router
 from src.api.routers.simulation import router as simulation_router
+from src.core.config import settings
+from src.core.logging_config import get_logger, setup_logging
 
-app = FastAPI(title=settings.app_name, debug=settings.debug)
+setup_logging(settings)
+log = get_logger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    log.info("Starting %s (env=%s)", settings.app_name, settings.env)
+    yield
+    log.info("Shutting down %s", settings.app_name)
+
+
+app = FastAPI(
+    title=settings.app_name,
+    debug=settings.debug,
+    lifespan=lifespan,
+)
 
 app.add_middleware(
     CORSMiddleware,

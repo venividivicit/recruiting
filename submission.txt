@@ -1,0 +1,31 @@
+Instructions to run the solution:
+docker compose up --build
+
+Primary changes:
+- restructured the backend project with clear separation between api, domain, core, schema and service configurations
+    - modular code is easy to maintain and expand overtime
+    - separation of concerts help with testing and upkeep
+- updated the project to use postgress database
+    - integrated alembic to keep track of schema
+    - made easy to make changes to database tables and models 
+    - clear pathway to handle migrations and downgrade (if needed)
+    - database connection pooling via SQLAlchemy to avoid connection overhead
+- created centralized configuration for backend project
+    - maintainer can update variable in .env for keys or config details
+- updated the project to use fastapi
+    - api is documented, user can access api contracts during development and see REST docs
+    - Pydantic schemas (e.g. simulation payload) gives typed, validated API input
+- add solid logger which can be easily expanded in the future 
+- using dependency injection for reusable modules
+- updated docker files and compose
+    - project can be up and running with simple command
+- improved KV store for fast look up
+    - improved the storage algorithm from O(N) to binary search via per agent look up
+    - significantly improved reads with small cost to writes
+- implemented async processing
+    - moved heavy, CPU bound work off of router's thread
+    - api stays responsive for multiple concurrent requests
+    - program uses other available cores to execute the simulation via ProcessPoolExecutor
+    - event loop is free to handle other requests without blocking
+- For local development, when DEBUG is enabled, Uvicorn runs with reload so code changes restart the server
+
