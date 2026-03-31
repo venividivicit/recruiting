@@ -29,5 +29,6 @@ class SimulationService:
         simulator = Simulator(store=store, init=init_dict)
         simulator.simulate()
 
-        self.repo.create(json.dumps(store.store))
-        return store.store
+        payload = store.export()
+        self.repo.create(json.dumps(payload))
+        return payload

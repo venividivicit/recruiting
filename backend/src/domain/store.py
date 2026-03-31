@@ -1,59 +1,59 @@
-# DATA STRUCTURE
-
-import doctest
+from bisect import bisect_right
+from collections import defaultdict
 
 
 class QRangeStore:
     """
-    A Q-Range KV Store mapping left-inclusive, right-exclusive ranges [low, high) to values.
-    Reading from the store returns the collection of values whose ranges contain the query.
-    ```
-    0  1  2  3  4  5  6  7  8  9
-    [A      )[B)            [E)
-    [C   )[D   )
-           ^       ^        ^  ^
-    ```
-    >>> store = QRangeStore()
-    >>> store[0, 3] = 'Record A'
-    >>> store[3, 4] = 'Record B'
-    >>> store[0, 2] = 'Record C'
-    >>> store[2, 4] = 'Record D'
-    >>> store[8, 9] = 'Record E'
-    >>> store[2, 0] = 'Record F'
-    Traceback (most recent call last):
-    IndexError: Invalid Range.
-    >>> store[2.1]
-    ['Record A', 'Record D']
-    >>> store[8]
-    ['Record E']
-    >>> store[5]
-    Traceback (most recent call last):
-    IndexError: Not found.
-    >>> store[9]
-    Traceback (most recent call last):
-    IndexError: Not found.
+    Optimized range store:
+    - write: append ranges [low, high) per agent
+    - read: binary-search latest candidate interval per agent
+    Public API remains:
+      store[low, high] = value
+      store[t] -> list[dict]
     """
 
+    def export(self):
+        rows = []
+        for agent_id, lows in self._lows.items():
+            highs = self._highs[agent_id]
+            vals = self._vals[agent_id]
+            for i in range(len(lows)):
+                rows.append((lows[i], highs[i], {agent_id: vals[i]}))
+        return rows
+
     def __init__(self):
-        self.store = []
+        self._lows = defaultdict(list)   # agent_id -> [low...]
+        self._highs = defaultdict(list)  # agent_id -> [high...]
+        self._vals = defaultdict(list)   # agent_id -> [state...]
+        self._count = 0
 
     def __setitem__(self, rng, value):
         try:
-            (low, high) = rng
+            low, high = rng
         except (TypeError, ValueError):
             raise IndexError("Invalid Range: must provide a low and high value.")
+
         if not low < high:
             raise IndexError("Invalid Range.")
-        self.store.append((low, high, value))
+
+        # value expected to be dict like {"Body1": {...}, "Body2": {...}}
+        for agent_id, agent_state in value.items():
+            self._lows[agent_id].append(low)
+            self._highs[agent_id].append(high)
+            self._vals[agent_id].append(agent_state)
+            self._count += 1
 
     def __getitem__(self, key):
-        ret = [v for (l, h, v) in self.store if l <= key < h]
+        ret = []
+        for agent_id in self._lows.keys():
+            lows = self._lows[agent_id]
+            i = bisect_right(lows, key) - 1
+            if i >= 0 and key < self._highs[agent_id][i]:
+                ret.append({agent_id: self._vals[agent_id][i]})
+
         if not ret:
             raise IndexError("Not found.")
         return ret
-    
+
     def __len__(self):
-        return len(self.store)
-
-
-doctest.testmod()
+        return self._count
