@@ -9,12 +9,12 @@ FROM python:3.12
 
 WORKDIR /app
 
-# Install Python dependencies
-COPY requirements.txt .
+# Install Python dependencies (build context = repository root)
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy backend source
-COPY . .
+COPY backend/ .
 
 # Copy compiled Rust binary
 RUN mkdir -p /queries/target/release

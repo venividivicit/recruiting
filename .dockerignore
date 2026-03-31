@@ -1,4 +1,5 @@
 **/node_modules
+queries/target
 **/data.json
 **/.DS_Store
 **/.venv
