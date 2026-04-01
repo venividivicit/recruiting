@@ -22,6 +22,8 @@ Primary changes:
 - improved KV store for fast look up
     - improved the storage algorithm from O(N) to binary search via per agent look up
     - significantly improved reads with small cost to writes
+- created query parser service
+    - reusing process instead of reopening one at each call which improves performance and overhead
 - implemented async processing
     - moved heavy, CPU bound work off of router's thread
     - api stays responsive for multiple concurrent requests
