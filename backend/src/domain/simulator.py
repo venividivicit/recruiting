@@ -2,19 +2,11 @@
 
 from functools import reduce
 from operator import __or__
-import subprocess
-import json
 
 from src.domain.modsim import agents
 from src.domain.store import QRangeStore
+from src.domain.query_parser import QueryParser
 
-def parse_query(query):
-    # NOTE: The query parser is invoked via a subprocess call to the Rust binary
-    popen = subprocess.Popen('../queries/target/release/sedaro-nano-queries', stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    (stdout, stderr) = popen.communicate(query)
-    if popen.returncode:
-        raise Exception(f"Parsing query failed: {stderr}")
-    return json.loads(stdout)
 
 class Simulator:
     """
@@ -40,6 +32,7 @@ class Simulator:
 
     def __init__(self, store: QRangeStore, init: dict):
         # NOTE: Creating a Simulator object does all the simulation "building"
+        self.query_parser = QueryParser()
         self.store = store
         store[-999999999, 0] = init
         self.init = init
@@ -48,8 +41,8 @@ class Simulator:
         for (agentId, sms) in agents.items():
             agent = []
             for sm in sms:
-                consumed = parse_query(sm["consumed"])["content"]
-                produced = parse_query(sm["produced"])
+                consumed = self.query_parser.parse(sm["consumed"])["content"]
+                produced = self.query_parser.parse(sm["produced"])
                 func = sm["function"]
                 agent.append({"func": func, "consumed": consumed, "produced": produced})
             self.sim_graph[agentId] = agent
